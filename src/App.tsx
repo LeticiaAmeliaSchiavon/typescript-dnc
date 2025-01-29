@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 
 interface TodoItem {
@@ -8,7 +8,7 @@ interface TodoItem {
 }
 
 function App() {
-
+  const chaveTarefasMemoria = "tarefas"
   const [todos, setTodos] = useState<TodoItem[]>([])
   const [novoTodo, setNovoTodo] = useState<string>("")
   const [estaCarregado, setEstaCarregado] = useState<boolean>(false)
@@ -40,6 +40,23 @@ function App() {
     })
     setTodos(todosAtualizados)
   }
+
+  useEffect(() => {
+    if(estaCarregado) {
+      localStorage.setItem(chaveTarefasMemoria, JSON.stringify(todos))
+    }
+  }, [todos, estaCarregado])
+
+  useEffect(() => {
+    const tarefasDaMemoria = localStorage.getItem(chaveTarefasMemoria)
+
+    if(tarefasDaMemoria) {
+      setTodos(JSON.parse(tarefasDaMemoria))
+    }
+
+    setEstaCarregado(true)
+
+  }, [])
 
   const obterTarefasCompletas = (): TodoItem[] => {
     return todos.filter(todo => todo.completado)
