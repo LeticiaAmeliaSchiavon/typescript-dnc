@@ -25,6 +25,11 @@ function App() {
     }
   }
 
+  const removerTarefa = (id: string) => {
+    const tarefasAtualizadas = todos.filter((todo) => todo.id !== id)
+    setTodos(tarefasAtualizadas)
+  }
+
   const marcarCompleto = (id: string) => {
     const todosAtualizados = todos.map((todo) => {
       if (todo.id === id) {
@@ -49,6 +54,7 @@ function App() {
               <li key={todo.id}>
                 <input type="checkbox" checked={todo.completado} onChange={() => marcarCompleto(todo.id)} />
                 <span style={{textDecoration: todo.completado ? 'line-through' : 'none'}}>{todo.texto}</span>
+                <button onClick={() => removerTarefa(todo.id)}>Remover</button>
               </li>
             ))
           }
